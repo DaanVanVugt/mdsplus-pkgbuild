@@ -11,7 +11,7 @@ depends=()
 makedepends=('autoconf')
 backup=()
 options=()
-install=()
+install=
 source=("https://github.com/MDSplus/mdsplus/archive/stable_release-${pkgver//[.]/-}.tar.gz")
 md5sums=('1add0a67f4380c6bbee35124dc3baf6a')
 
@@ -19,16 +19,18 @@ build() {
 	cd "$srcdir/mdsplus-stable_release-${pkgver//[.]/-}"
 	mkdir -p build
 	cd build
+	export CFLAGS="-O2 -march=native -fcommon"
+	export CXXFLAGS="${CFLAGS}"
+	export FFLAGS='-fallow-argument-mismatch -fallow-invalid-boz'
 	../configure --prefix="$pkgdir/"
-	#autoreconf -fi -I m4
-	#./configure --prefix="$pkgdir/"
-	CFLAGS="-march=native -O2 -pipe -fcommon"
-	CXXFLAGS="${CFLAGS}"
+	make clean
 	make
 }
 
 package() {
 	cd "$srcdir/mdsplus-stable_release-${pkgver//[.]/-}"
+	cd build
 	make DESTDIR="$pkgdir/" install
-	install -D "$pkgdir/include" include
+	# remove a lot of superfluous stuff
+	rm -Rf ChangeLog desktop epics etc home idl java local matlab MDSplus* nodejs php pixmaps pydevices python setup.csh setup.sh tdi trees xml
 }
