@@ -8,7 +8,7 @@ url="https://github.com/MDSplus/mdsplus"
 license=('MIT')
 groups=()
 depends=()
-makedepends=('autoconf')
+makedepends=('autoconf' 'jdk11-openjdk')
 backup=()
 options=()
 install=
@@ -22,15 +22,19 @@ build() {
 	export CFLAGS="-O2 -march=native -fcommon"
 	export CXXFLAGS="${CFLAGS}"
 	export FFLAGS='-fallow-argument-mismatch -fallow-invalid-boz'
-	../configure --prefix="$pkgdir/"
+	# TODO: switch to jdk11 with paths, jdk14 doesn't work yet
+	../configure --prefix="$pkgdir/usr/"
 	make clean
-	make
+	make all
+	make java/jtraverser
 }
 
 package() {
 	cd "$srcdir/mdsplus-stable_release-${pkgver//[.]/-}"
 	cd build
-	make DESTDIR="$pkgdir/" install
+	make DESTDIR="$pkgdir/usr/" install
 	# remove a lot of superfluous stuff
-	rm -Rf ChangeLog desktop epics etc home idl java local matlab MDSplus* nodejs php pixmaps pydevices python setup.csh setup.sh tdi trees xml
+	# does not copy jtraverser and other tools
+	cd "$pkgdir"
+	#rm -Rf ChangeLog desktop epics etc home idl java local matlab MDSplus* nodejs php pixmaps pydevices python setup.csh setup.sh tdi trees xml
 }
