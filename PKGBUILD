@@ -2,7 +2,7 @@
 pkgname=MDSplus
 pkgver=7.96.14
 pkgrel=1
-pkgdesc="The MDSplus data management system (alpha from github)"
+pkgdesc="The MDSplus data management system (stable from github)"
 arch=('i686' 'x86_64')
 url="https://github.com/MDSplus/mdsplus"
 license=('MIT')
@@ -35,6 +35,7 @@ package() {
 	make DESTDIR="$pkgdir/usr/" install
 	# remove a lot of superfluous stuff
 	# does not copy jtraverser and other tools
-	cd "$pkgdir"
-	#rm -Rf ChangeLog desktop epics etc home idl java local matlab MDSplus* nodejs php pixmaps pydevices python setup.csh setup.sh tdi trees xml
+	install -D java/jtraverser/jTraverser.jar "$pkgdir/usr/java/classes/jTraverser.jar"
+	cd "$pkgdir/usr"
+	rm -Rf ChangeLog desktop epics etc home idl local matlab MDSplus* nodejs php pixmaps pydevices python setup.csh setup.sh tdi trees xml
 }
