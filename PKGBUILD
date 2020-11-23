@@ -38,4 +38,5 @@ package() {
 	install -D java/jtraverser/jTraverser.jar "$pkgdir/usr/java/classes/jTraverser.jar"
 	cd "$pkgdir/usr"
 	rm -Rf ChangeLog desktop epics etc home idl local matlab MDSplus* nodejs php pixmaps pydevices python setup.csh setup.sh tdi trees xml
+	rm -Rf include/sqldb.h include/sqlfront.h
 }
